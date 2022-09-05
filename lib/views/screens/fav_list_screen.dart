@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../controller/blog/blogs_list_controller.dart';
+import '../../controller/blog/state/blog_state.dart';
 import '../../model/blog_model.dart';
 import 'components/blog_card.dart';
 
 class FavListScreen extends ConsumerStatefulWidget {
-  FavListScreen({Key? key, required this.blogsList}) : super(key: key);
-
-  List<BlogModel> blogsList;
+  FavListScreen({Key? key}) : super(key: key);
 
   @override
   _FavListScreenState createState() => _FavListScreenState();
@@ -17,10 +17,11 @@ class FavListScreen extends ConsumerStatefulWidget {
 class _FavListScreenState extends ConsumerState<FavListScreen> {
   List<BlogModel> favList = [];
 
-  searchFavorite() {
+  searchFavorite(List<BlogModel> blogsList) {
     /// Here from all blogs, sorting the favorite blogs and add them in new list
     BlogModel item;
-    for (item in widget.blogsList) {
+    favList = [];
+    for (item in blogsList) {
       if (item.isFavorite == 1) {
         favList.add(item);
       }
@@ -31,11 +32,15 @@ class _FavListScreenState extends ConsumerState<FavListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    searchFavorite();
   }
 
   @override
   Widget build(BuildContext context) {
+    final blogsListState = ref.watch(blogsListProvider);
+    List<BlogModel> blogsList =
+        blogsListState is BlogsListSuccessState ? blogsListState.blogsList : [];
+    searchFavorite(blogsList);
+
     return favList.isNotEmpty
         ? ListView.builder(
             itemCount: favList.length,

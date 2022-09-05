@@ -27,16 +27,12 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final blogsListState = ref.watch(blogsListProvider);
-    List<BlogModel> blogsList =
-    blogsListState is BlogsListSuccessState ? blogsListState.blogsList : [];
-
     return MaterialApp(
       title: 'Blog Project for Bootcamp',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      // home: const BlogsListScreen(),
-      home: BlogScreen(blogsList: blogsList,blogsListState: blogsListState,),
+      /// create a landing page to show navigation
+      home: BlogScreen(),
     );
   }
 }

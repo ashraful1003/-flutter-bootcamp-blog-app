@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BlogsListScreen extends ConsumerStatefulWidget {
-  BlogsListScreen({Key? key, required this.blogsList}) : super(key: key);
+  BlogsListScreen({Key? key}) : super(key: key);
 
-  List<BlogModel> blogsList;
+  // List<BlogModel> blogsList;
 
   @override
   _BlogsListScreenState createState() => _BlogsListScreenState();
@@ -18,11 +18,17 @@ class BlogsListScreen extends ConsumerStatefulWidget {
 class _BlogsListScreenState extends ConsumerState<BlogsListScreen> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.blogsList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return BlogCard(blogModel: widget.blogsList[index]);
-      },
-    );
+    final blogsListState = ref.watch(blogsListProvider);
+    List<BlogModel> blogsList =
+        blogsListState is BlogsListSuccessState ? blogsListState.blogsList : [];
+
+    return blogsListState is BlogsListSuccessState
+        ? ListView.builder(
+            itemCount: blogsList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return BlogCard(blogModel: blogsList[index]);
+            },
+          )
+        : const Center(child: CircularProgressIndicator());
   }
 }

@@ -10,10 +10,14 @@ import '../../controller/blog/state/blog_state.dart';
 import 'create_update_blog_screen.dart';
 
 class BlogScreen extends ConsumerStatefulWidget {
-  BlogScreen({Key? key, required this.blogsList, required this.blogsListState}) : super(key: key);
+  BlogScreen({
+    Key? key,
+    // required this.blogsList,
+    // required this.blogsListState,
+  }) : super(key: key);
 
-  List<BlogModel>? blogsList;
-  dynamic blogsListState;
+  // List<BlogModel>? blogsList;
+  // dynamic blogsListState;
 
   @override
   _BlogScreenState createState() => _BlogScreenState();
@@ -21,6 +25,11 @@ class BlogScreen extends ConsumerStatefulWidget {
 
 class _BlogScreenState extends ConsumerState<BlogScreen> {
   int _selectedIndex = 0;
+
+  List<Widget> widgetOptions = [
+    BlogsListScreen(),
+    FavListScreen(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -30,20 +39,9 @@ class _BlogScreenState extends ConsumerState<BlogScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetOptions = [
-      BlogsListScreen(
-        blogsList: widget.blogsList!,
-      ),
-      FavListScreen(
-        blogsList: widget.blogsList!,
-      ),
-    ];
-
     return Scaffold(
       appBar: AppBar(title: const Text('Blog App')),
-      body: widget.blogsListState is BlogsListSuccessState
-          ? widgetOptions.elementAt(_selectedIndex)
-          : const Center(child: CircularProgressIndicator()),
+      body: widgetOptions.elementAt(_selectedIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
